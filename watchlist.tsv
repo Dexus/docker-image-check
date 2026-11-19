@@ -1,0 +1,19 @@
+# Probes run in every running container (via docker exec, no shell) and on the host.
+# They catch software built from source that the Trivy DB cannot see.
+# Columns (TAB separated):  name  version_cmd  fixed_versions  cves  exposure_cmd  exposure_regex  note
+#   fixed_versions: comma list, one per branch; vulnerable = below the fix of its own major.minor branch,
+#                   or (branch without fix) below the newest fix. "-" = info only, just log the version.
+#   exposure_cmd/regex: optional extra condition that makes the bug reachable ("-" = none).
+# Add a row here for the next "X2Shell" - no code change needed.
+nginx	nginx -v	1.30.7,1.31.9	CVE-2026-123007,CVE-2026-123633	nginx -T	^[^#]*\bhttp2\b	NGINX2Shell, needs HTTP/2 enabled
+php	php -v	8.2.35,8.3.36,8.4.27,8.5.12	CVE-2026-109618,CVE-2026-109619	-	-	PHP2Shell, CISA KEV, actively exploited
+php-fpm	php-fpm -v	8.2.35,8.3.36,8.4.27,8.5.12	CVE-2026-109618,CVE-2026-109619	-	-	PHP2Shell (fpm binary)
+openssl	openssl version	-	-	-	-	info
+httpd	httpd -v	-	-	-	-	info
+apache2	apache2 -v	-	-	-	-	info
+sshd	sshd -V	-	-	-	-	info
+node	node --version	-	-	-	-	info
+java	java -version	-	-	-	-	info
+python3	python3 --version	-	-	-	-	info
+postgres	postgres --version	-	-	-	-	info
+redis	redis-server --version	-	-	-	-	info
